@@ -44,16 +44,16 @@ The core innovation allows string operations, pattern matching, and knowledge re
 ### Recursive Ternary Node Structure
 ```c
 typedef struct ternary_node {
-    trit_t value;                    // {-1: FALSE, 0: MAYBE, 1: TRUE}
-    
+    rtka_value_t value;              // {-1: FALSE, 0: UNKNOWN, 1: TRUE}
+
     // The innovation: MAYBE can branch recursively
     struct ternary_node* if_false;  // What if it's actually false?
     struct ternary_node* if_maybe;  // Still uncertain? Go deeper
     struct ternary_node* if_true;   // What if it's actually true?
-    
+
     // Probability distribution at this level
     double prob_false, prob_maybe, prob_true;
-    
+
     // Confidence and depth tracking
     double confidence;
     int depth;
@@ -66,10 +66,10 @@ typedef struct ternary_node {
 typedef struct tst_node {
     char key;
     struct tst_node *left, *middle, *right;
-    
-    trit_t exists;           // THREE-VALUED existence
-    double match_confidence;  // Fuzzy matching score
-    void* ml_data;           // Associated ML features
+
+    rtka_value_t exists;         // THREE-VALUED existence {-1,0,1}
+    double match_confidence;      // Fuzzy matching score
+    void* ml_data;               // Associated ML features
 } tst_node_t;
 ```
 
@@ -80,20 +80,20 @@ typedef struct tst_node {
 // Queries refine themselves recursively
 fractal_query_t execute_query(const char* query, int max_depth) {
     ternary_node_t* tree = create_recursive_maybe(query, max_depth);
-    
-    while (tree->value == T_MAYBE && depth_remaining > 0) {
+
+    while (tree->value == RTKA_UNKNOWN && depth_remaining > 0) {
         // Get more information or context
         double new_evidence = gather_evidence(tree->context);
-        
+
         // Branch based on evidence
-        if (new_evidence < 0.33) 
+        if (new_evidence < 0.33)
             tree = tree->if_false;
         else if (new_evidence > 0.67)
             tree = tree->if_true;
         else
             tree = tree->if_maybe;  // Recurse deeper!
     }
-    
+
     return synthesize_result(tree);
 }
 ```
@@ -137,6 +137,13 @@ fractal_query_t execute_query(const char* query, int max_depth) {
 - **Tree Traversal**: O(log n) with balanced structure
 - **Confidence Update**: O(1) per operation
 - **Memory**: O(n·d) for n nodes at depth d
+
+### Optimization Techniques
+- **Loop Unrolling (OPT-082)**: 4x unrolling in fractal tree traversal for branch prediction
+- **Early Termination (OPT-125)**: Skip subtrees when confidence exceeds threshold
+- **LUT Acceleration (OPT-003)**: Precomputed (2/3)^n decay tables for confidence
+- **Cache Optimization (OPT-089)**: Aligned node structures for cache efficiency
+- **SIMD Operations (OPT-085)**: Vectorized confidence calculations
 
 ### Convergence Properties
 - **Uncertainty Decay**: Proven (2/3)^(n-1) convergence
