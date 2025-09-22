@@ -1,6 +1,6 @@
 # RTKA-ML: Recursive Ternary Knowledge Algorithm for Machine Learning - Proof of Concept
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17173499.svg)](https://doi.org/10.5281/zenodo.17173499)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17137875.svg)](https://doi.org/10.5281/zenodo.17137875)
 
 **Status**: Proof of concept  
 **License**: CC BY-NC-SA 4.0 (Research and non-commercial use only)  
