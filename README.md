@@ -1,6 +1,6 @@
 # RTKA-ML: Recursive Ternary Knowledge Algorithm for Machine Learning
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17148691.svg)](https://doi.org/10.5281/zenodo.17148691)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17173499.svg)](https://doi.org/10.5281/zenodo.17173499)
 
 ## Overview
 
