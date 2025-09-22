@@ -1,5 +1,7 @@
 # RTKA-ML: Recursive Ternary Knowledge Algorithm for Machine Learning
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17148691.svg)](https://doi.org/10.5281/zenodo.17148691)
+
 ## Overview
 
 RTKA-ML extends the RTKA-U universal core framework with machine learning capabilities, implementing recursive ternary logic for artificial intelligence applications. This module bridges symbolic reasoning and pattern recognition by incorporating uncertainty directly into machine learning algorithms.
