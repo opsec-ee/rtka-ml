@@ -1,61 +1,115 @@
-# RTKA-ML: Recursive Ternary Knowledge Algorithm for Machine Learning
+# RTKA-ML: Recursive Ternary Knowledge Algorithm for Machine Learning - Proof of Concept
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17173499.svg)](https://doi.org/10.5281/zenodo.17173499)
 
-## Overview
+**Status**: Proof of concept  
+**License**: CC BY-NC-SA 4.0 (Research and non-commercial use only)  
+**Author**: H. Overman (opsec.ee@pm.me)  
 
-RTKA-ML extends the RTKA-U universal core framework with machine learning capabilities, implementing recursive ternary logic for artificial intelligence applications. This module bridges symbolic reasoning and pattern recognition by incorporating uncertainty directly into machine learning algorithms.
+## Project Status
 
-The framework builds upon the mathematical foundations of RTKA-U, applying ternary logic principles to machine learning contexts where epistemic uncertainty and incomplete information affect model predictions. The implementation provides ternary decision structures and fuzzy matching algorithms that maintain uncertainty throughout computational processes.
+This repository contains a proof-of-concept implementation exploring the application of recursive ternary logic to machine learning. The code demonstrates core concepts but is not production-ready and lacks many features necessary for practical deployment. This implementation serves primarily to validate the theoretical approach and provide a foundation for future research.
 
-## Core Components
+## Current Capabilities
 
-The implementation defines recursive ternary nodes that extend beyond simple three-state values. When a node evaluates to MAYBE, the structure supports recursive branching into sub-decisions for FALSE, MAYBE, and TRUE possibilities. Each branch maintains probability distributions and confidence measures, creating a hierarchical uncertainty representation that can model complex ambiguous scenarios.
+The implementation provides basic functionality for ternary logic operations extending Kleene's three-valued logic with arithmetic encodings. A simple tensor system supports multi-dimensional arrays with ternary values and confidence scores. Basic neural network layers implement forward pass computation with ternary weights. Gradient computation enables limited learning through confidence adjustment. Memory pooling reduces allocation overhead in controlled scenarios.
 
-The ternary search tree implementation provides ultra-fast string operations with fuzzy matching capabilities. The tree structure uses left, middle, and right pointers for character comparison, with the middle pointer continuing string traversal. Each node maintains a ternary existence value and match confidence score, enabling approximate string matching with uncertainty quantification.
+The system can perform simple training tasks on small datasets and demonstrates the mathematical feasibility of the approach. However, performance has not been rigorously benchmarked, and many optimizations remain unimplemented.
 
-## Fuzzy Pattern Matching
+## Limitations
 
-The fuzzy search algorithm implements edit distance tolerance with confidence decay. When exact matches fail, the algorithm explores substitution paths with configurable error tolerance. Each substitution reduces confidence scores, and partial matches return MAYBE states rather than forcing binary match decisions. This approach maintains uncertainty about match quality, supporting applications where approximate matches require different handling than exact matches.
+This proof of concept has significant limitations that prevent production use. Training is single-threaded with no parallelization support. The implementation supports only dense tensors without sparse representations. No GPU acceleration or distributed computing capabilities exist. The testing framework requires external dependencies not included in the repository. Performance benchmarks are preliminary and unvalidated. Error handling is incomplete with many edge cases unaddressed. The system lacks logging, monitoring, or debugging infrastructure. Model serialization uses a basic binary format without versioning or validation.
 
-The search algorithm distinguishes between confident matches with high similarity scores, uncertain matches requiring validation, and definitive non-matches. This ternary classification provides more nuanced pattern matching than traditional binary approaches, supporting applications in natural language processing and information retrieval.
+## Dependencies
 
-## Recursive Uncertainty Resolution
+Building this project requires GCC 4.9+ or Clang 3.4+ with C11 support. The math library (-lm) provides standard mathematical functions. POSIX threads (-lpthread) enable atomic operations. Optional AVX2 support requires a compatible processor and compiler flags. The testing framework requires Criterion 2.4+, which must be installed separately.
 
-The framework implements recursive uncertainty resolution through decision trees that branch on MAYBE states. Each level of recursion represents additional information gathering or analysis, with probability distributions guiding exploration paths. The resolution process simulates incremental evidence accumulation, demonstrating how uncertainty can be progressively reduced through recursive evaluation.
+## Build Instructions
 
-The fractal certainty concept extends traditional confidence measures with depth tracking through uncertainty layers. As the system recurses through MAYBE branches, it maintains a path history and depth counter, providing insights into the complexity of uncertainty resolution for specific decisions.
+To compile the basic implementation without optimizations:
 
-## Integration with RTKA-U
+```bash
+gcc -std=c11 -Wall -Wextra -O2 rtka_ml_enhanced_corrected.c -lm -lpthread -o rtka_ml
+```
 
-The module maintains full compatibility with RTKA-U core operations, utilizing the same ternary domain encoding and arithmetic operations. The confidence propagation mechanisms from RTKA-U extend naturally to machine learning contexts, with multiplicative rules for conjunction and inclusion-exclusion principles for disjunction applying to model ensemble predictions.
+For optimized builds with AVX2 support on compatible systems:
 
-The implementation preserves the UNKNOWN Preservation Theorem properties, ensuring that uncertainty in training data or model parameters propagates correctly through learning algorithms. This mathematical consistency enables formal analysis of model behavior under uncertainty.
+```bash
+gcc -std=c11 -Wall -Wextra -O3 -march=native -mavx2 rtka_ml_enhanced_corrected.c -lm -lpthread -o rtka_ml
+```
 
-## Implementation Details
+Building tests requires Criterion installation. On Ubuntu/Debian systems:
 
-The C implementation uses compiler-specific optimizations when available, including always-inline directives for critical functions and branch prediction hints for hot and cold code paths. These optimizations improve performance while maintaining code portability through conditional compilation.
+```bash
+sudo apt-get install libcriterion-dev
+gcc -std=c11 rtka_ml_test_framework.c rtka_ml_enhanced_corrected.c -lcriterion -lm -lpthread -o test_rtka
+```
 
-Memory management uses calloc for zero-initialization, ensuring predictable initial states for all data structures. Error checking validates memory allocations and parameter ranges, preventing undefined behavior from invalid inputs. The implementation follows defensive programming practices suitable for production deployment.
+Note that Criterion may need to be built from source on some systems. Refer to the Criterion documentation for platform-specific installation instructions.
 
-## Application Contexts
+## File Structure
 
-The framework supports applications in text processing with uncertainty, where fuzzy matching and approximate string operations benefit from explicit uncertainty representation. Natural language processing tasks can distinguish between confident interpretations and ambiguous passages requiring clarification.
+The repository currently contains these core files:
 
-Pattern recognition systems utilize the ternary decision trees for classification with uncertainty bounds. Rather than forcing definitive classifications for ambiguous inputs, the system maintains MAYBE states that trigger additional analysis or human review.
+- `rtka_ml_enhanced_corrected.c` - Main implementation with basic ternary operations
+- `rtka_base.h` - Header defining core ternary types and operations
+- `rtka_ml_test_framework.c` - Test suite skeleton (requires Criterion)
+- `README.md` - This documentation
 
-The recursive uncertainty resolution mechanisms support incremental learning scenarios where models refine predictions as additional evidence becomes available. This capability proves valuable in online learning and adaptive systems that must operate with incomplete information.
+Additional files mentioned in the documentation such as CONTRIBUTING.md, detailed technical documentation, and example applications do not yet exist in the repository.
 
-## Repository Contents
+## Usage
 
-The repository provides the core C implementation with ternary node structures and search algorithms, example applications demonstrating fuzzy matching and uncertainty resolution, integration headers for compatibility with RTKA-U core functions, and documentation of the mathematical extensions for machine learning contexts.
+The current implementation provides low-level C functions without high-level interfaces. Basic usage requires understanding the tensor and layer structures:
 
-## Licensing
+```c
+// Example tensor creation
+size_t dims[] = {10, 10};
+ternary_tensor_t* tensor = tensor_create(dims, 2);
+if (!tensor) {
+    // Handle allocation failure
+}
 
-RTKA-ML is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0) for research and non-commercial use. The licensing terms match those of RTKA-U to ensure consistent usage rights across the framework family.
+// Tensor must be manually destroyed
+tensor_destroy(tensor);
+```
+
+Complete examples and tutorials are not yet available. The API is subject to change as the project evolves.
+
+## Mathematical Foundation
+
+The system implements Kleene's strong three-valued logic with values encoded as -1 (FALSE), 0 (UNKNOWN/MAYBE), and 1 (TRUE). Logical operations follow standard Kleene truth tables using min for AND and max for OR operations. Confidence propagation uses multiplicative rules for conjunction and inclusion-exclusion for disjunction.
+
+Detailed mathematical analysis and proofs are planned but not yet documented. The current implementation serves as a computational validation of the basic concepts.
+
+## Performance
+
+Preliminary testing suggests memory pooling reduces allocation overhead compared to individual malloc calls. SIMD instructions provide speedup for confidence calculations when AVX2 is available. However, comprehensive benchmarking has not been performed, and performance claims should be considered speculative.
+
+The switch to int8_t storage for ternary values reduces memory usage but may impact computational performance due to type conversions. Real-world performance characteristics remain to be determined through systematic benchmarking.
+
+## Known Issues
+
+The implementation has several known problems requiring attention. Memory management lacks comprehensive leak detection and validation. Concurrent access to shared tensors causes undefined behavior without external synchronization. Numerical stability in gradient computation has not been thoroughly analyzed. The testing framework is incomplete with many test cases unimplemented. Build configuration requires manual compiler flag management without CMake or autotools support.
+
+## Future Work
+
+The project requires substantial development before practical use. Immediate priorities include completing the test suite, implementing proper error handling throughout, and adding basic performance benchmarks. Longer-term goals involve exploring parallelization strategies, investigating sparse tensor representations, and developing higher-level Python bindings.
+
+These goals represent research directions rather than committed development plans. The project may evolve in different directions based on research findings and community feedback.
+
+## Contributing
+
+This project is in early development and not yet ready for external contributions. If you are interested in the research direction, please contact the author directly to discuss collaboration opportunities.
 
 ## Contact
 
-H. Overman  
-Email: opsec.ee@pm.me  
-GitHub: github.com/opsec-ee/rtka-ml
+For questions about the research or collaboration opportunities:  
+H. Overman - opsec.ee@pm.me
+
+Please note this is a research project without support guarantees. Response times may vary.
+
+## Disclaimer
+
+This software is provided as-is without warranties of any kind. It is not suitable for production use and should be considered experimental research code. Users assume all risks associated with its use.
+
